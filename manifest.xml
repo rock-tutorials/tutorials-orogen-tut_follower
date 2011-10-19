@@ -1,0 +1,9 @@
+<package>
+  <description brief="Simple control behaviour that generates a MotionCommand2D to follow a moving object">
+  
+  </description>
+  <author>Sylvain Joyeux/sylvain.joyeux@dfki</author>
+
+  <depend package="base/orogen/types" />
+  <depend package="control/motor_controller" />
+</package>

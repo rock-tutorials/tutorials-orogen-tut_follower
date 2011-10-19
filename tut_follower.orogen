@@ -1,0 +1,24 @@
+name "tut_follower"
+
+using_library 'motor_controller'
+# To get the PIDSettings class and export is as property
+import_types_from "motor_controller/PID.hpp"
+# Get the base types
+import_types_from "base"
+
+task_context "Task" do
+    # The parameters of the distance controller (which controls speed)
+    property "pid_distance", "/motor_controller/PIDSettings"
+    # The parameters of the heading controller (which controls direction)
+    property "pid_heading", "/motor_controller/PIDSettings"
+
+    # The position of our target
+    input_port "target_position", "/base/samples/RigidBodyState"
+
+    # The command
+    output_port "cmd", "/base/MotionCommand2D"
+
+    # Update when we get a new position
+    port_driven
+end
+
