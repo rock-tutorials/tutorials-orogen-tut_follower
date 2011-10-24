@@ -5,18 +5,26 @@ using_library 'motor_controller'
 import_types_from "motor_controller/PID.hpp"
 # Get the base types
 import_types_from "base"
+# And get the debug type
+import_types_from "FollowerTypes.hpp"
 
 task_context "Task" do
     # The parameters of the distance controller (which controls speed)
     property "pid_distance", "/motor_controller/PIDSettings"
     # The parameters of the heading controller (which controls direction)
     property "pid_heading", "/motor_controller/PIDSettings"
+    # The distance at which we should follow our target
+    property "desired_distance", "double", 0
 
     # The position of our target
     input_port "target_position", "/base/samples/RigidBodyState"
+    # Our own current position
+    input_port "current_position", "/base/samples/RigidBodyState"
 
     # The command
     output_port "cmd", "/base/MotionCommand2D"
+
+    output_port "debug", "tut_follower/Debug"
 
     # Update when we get a new position
     port_driven

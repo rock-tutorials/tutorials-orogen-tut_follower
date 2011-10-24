@@ -4,6 +4,7 @@
 #define TUT_FOLLOWER_TASK_TASK_HPP
 
 #include "tut_follower/TaskBase.hpp"
+#include <motor_controller/PID.hpp>
 
 namespace tut_follower {
     class Task : public TaskBase
@@ -11,7 +12,9 @@ namespace tut_follower {
 	friend class TaskBase;
     protected:
 
-
+        motor_controller::PID pid_distance;
+        motor_controller::PID pid_heading;
+        base::Time last_update;
 
     public:
         Task(std::string const& name = "tut_follower::Task", TaskCore::TaskState initial_state = Stopped);
@@ -39,7 +42,7 @@ namespace tut_follower {
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-        // bool startHook();
+        bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -55,7 +58,7 @@ namespace tut_follower {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-        // void updateHook();
+        void updateHook();
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
