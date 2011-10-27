@@ -7,11 +7,13 @@ using namespace tut_follower;
 Task::Task(std::string const& name, TaskCore::TaskState initial_state)
     : TaskBase(name, initial_state)
 {
+    setDefaultValues();
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state)
     : TaskBase(name, engine, initial_state)
 {
+    setDefaultValues();
 }
 
 Task::~Task()
@@ -19,6 +21,17 @@ Task::~Task()
 }
 
 
+void Task::setDefaultValues()
+{
+    motor_controller::PIDSettings settings;
+    settings.K = 0.05;
+    settings.YMax = 0.5;
+    _pid_distance.set(settings);
+    settings.K = 1;
+    settings.YMax = 1;
+    settings.YMin = -1;
+    _pid_heading.set(settings);
+}
 
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See Task.hpp for more detailed

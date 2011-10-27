@@ -16,6 +16,8 @@ namespace tut_follower {
         motor_controller::PID pid_heading;
         base::Time last_update;
 
+        void setDefaultValues();
+
     public:
         Task(std::string const& name = "tut_follower::Task", TaskCore::TaskState initial_state = Stopped);
         Task(std::string const& name, RTT::ExecutionEngine* engine, TaskCore::TaskState initial_state = Stopped);
