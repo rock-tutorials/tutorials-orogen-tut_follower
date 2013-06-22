@@ -59,20 +59,13 @@ bool Task::startHook()
 void Task::updateHook()
 {
     TaskBase::updateHook();
-    base::samples::RigidBodyState target;
-    if (_target_position.readNewest(target) == RTT::NoData)
-        return;
-
-    base::samples::RigidBodyState current;
-    if (_current_position.readNewest(current) == RTT::NoData)
+    rock_tutorial::BearingDistanceSensor sensor;
+    if (_bearing_distance.readNewest(sensor) == RTT::NoData)
         return;
 
     if (last_update.isNull())
         last_update = base::Time::now();
     base::Time now = base::Time::now();
-
-    Eigen::Vector3d v = (target.position - current.position);
-    double d = v.norm();
 
     // The resulting command
     base::MotionCommand2D cmd;
@@ -84,20 +77,13 @@ void Task::updateHook()
     //
     // We don't compute it when the target is too close, as the computation
     // would be ill defined
-    base::Angle yaw_delta;
-    Eigen::Vector3d forward = Eigen::Vector3d::Zero();
-    if (d > _desired_distance / 10)
-    {
-        forward = current.orientation * base::Vector3d::UnitX();
-        yaw_delta = base::Angle::vectorToVector(forward, v, base::Vector3d::UnitZ());
-    }
-    cmd.rotation = pid_heading.update(yaw_delta.getRad(), 0, (now - last_update).toSeconds());
+    cmd.rotation = pid_heading.update(0, sensor.bearing.getRad(), (now - last_update).toSeconds());
 
     // Don't move if the difference in heading is too big, or we might do weird
     // things
-    if (fabs(yaw_delta.getRad()) < M_PI / 4)
+    if (fabs(sensor.bearing.getRad()) < M_PI / 4)
     {
-        cmd.translation = pid_distance.update(_desired_distance, d, (now - last_update).toSeconds());
+        cmd.translation = pid_distance.update(_desired_distance, sensor.distance, (now - last_update).toSeconds());
         debug.forward_motion_allowed = true;
     }
     else
@@ -108,15 +94,6 @@ void Task::updateHook()
 
     // Write the 
     _cmd.write(cmd);
-
-    debug.current_forward = forward;
-    debug.yaw_delta = yaw_delta.getRad();
-    debug.d = d;
-    debug.target_position = target.position;
-    debug.current_position = current.position;
-    debug.delta_position = v;
-    debug.result = cmd;
-    _debug.write(debug);
 
     last_update = now;
 
