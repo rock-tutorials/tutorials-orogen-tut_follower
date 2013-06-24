@@ -6,4 +6,5 @@
 
   <depend package="base/orogen/types" />
   <depend package="control/motor_controller" />
+  <depend package="tutorials/orogen/tut_sensor" />
 </package>
