@@ -1,8 +1,8 @@
 #ifndef TUT_FOLLOWER_TYPES_HPP
 #define TUT_FOLLOWER_TYPES_HPP
 
-#include <base/motion_command.h>
-#include <base/eigen.h>
+#include <base/commands/Motion2D.hpp>
+#include <base/Eigen.hpp>
 
 namespace tut_follower {
     struct Debug {
@@ -14,7 +14,7 @@ namespace tut_follower {
         base::Vector3d current_position;
         base::Vector3d delta_position;
         base::Vector3d current_forward;
-        base::MotionCommand2D result;
+        base::commands::Motion2D result;
     };
 }
 

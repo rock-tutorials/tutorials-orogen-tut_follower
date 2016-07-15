@@ -68,7 +68,7 @@ void Task::updateHook()
     base::Time now = base::Time::now();
 
     // The resulting command
-    base::MotionCommand2D cmd;
+    base::commands::Motion2D cmd;
     // The component's internal structure for debugging purposes
     Debug debug;
 

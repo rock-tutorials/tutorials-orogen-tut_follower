@@ -21,7 +21,7 @@ task_context "Task" do
     input_port "bearing_distance", "/rock_tutorial/BearingDistanceSensor"
 
     # The command
-    output_port "cmd", "/base/MotionCommand2D"
+    output_port "cmd", "/base/commands/Motion2D"
 
     output_port "debug", "tut_follower/Debug"
 
